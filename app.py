@@ -4,6 +4,8 @@ from deepgram import Deepgram
 from dotenv import load_dotenv
 import os
 from utils.audio_interpretation import get_interpretation_from_prompt
+from speech_to_text.choose_model import fct1, import_deepgram_model
+
 
 app = Flask(__name__)
 
@@ -38,16 +40,18 @@ def audio_interpret():
     
     # text = response["results"]["channels"][0]["alternatives"][0]["transcript"]
 
-    text = "to do dishes"
+    # text = "Undertake a task with unspecified details, occurring on a date yet to be discovered, and an undefined level of urgency."
 
-    interpreted_prompt = get_interpretation_from_prompt(text)
+    # interpreted_prompt = get_interpretation_from_prompt(text)
 
-    result = {
-        "original_text": text,
-        "interpreted_prompt": interpreted_prompt
-    }
+    # result = {
+    #     "original_text": text,
+    #     "interpreted_prompt": interpreted_prompt
+    # }
 
-    return json.dumps(result, indent=4)
+    result = import_deepgram_model()
+
+    return result
 
 
 if __name__ == "__main__":
