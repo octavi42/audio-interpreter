@@ -1,10 +1,9 @@
 from flask import Flask
 import json
-from deepgram import Deepgram
 from dotenv import load_dotenv
 import os
 from utils.audio_interpretation import get_interpretation_from_prompt
-from speech_to_text.choose_model import fct1, import_deepgram_model
+from speech_to_text.choose_model import process_audio
 
 
 app = Flask(__name__)
@@ -49,9 +48,13 @@ def audio_interpret():
     #     "interpreted_prompt": interpreted_prompt
     # }
 
-    result = import_deepgram_model()
+    
 
-    return result
+    result = process_audio(AUDIO_URL)
+
+    interpreted_result = get_interpretation_from_prompt("update columne 3 to 4 from 5 nov to 6 dec this year")
+
+    return interpreted_result
 
 
 if __name__ == "__main__":

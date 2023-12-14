@@ -16,4 +16,4 @@ class Model1(ModelBase):
         # For now, just returning a placeholder result
         # result = self._simulate_audio_processing(audio_url)
 
-        return audio_url
+        return self.api_key
