@@ -73,6 +73,10 @@ def get_interpretation_from_prompt(prompt):
                                     "description": "give me the action that the user wants to perform, inclidign what the action targets, the result should be given from the prompt, if it is not relevant return null",
                                     "enum": ["create", "read", "update", "delete"]
                                 },
+                                "action_target": {
+                                    "type": "string",
+                                    "description": "give me the target of the action, from the prompt, what specific things does the actions target, if it is not relevant return null"
+                                },
                                 "from_date": {
                                     "type": "string",
                                     "description": "give me the date from which the user wants to perform the action in the format YYYY-MM-DD HH:mm"
