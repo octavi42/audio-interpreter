@@ -41,9 +41,9 @@ def import_model(env_model_name):
     return result
 
 
-def process_audio(audio_url, env_model_name="deepgram"):
+def process_audio(audio, env_model_name="deepgram"):
     model = import_model(env_model_name)
 
-    result = [model.process_audio(audio_url)]
+    result = [model.process_audio(audio)]
 
-    return result
+    return result[0][0]

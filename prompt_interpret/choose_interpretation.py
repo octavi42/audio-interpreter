@@ -70,7 +70,8 @@ def get_interpretation_from_prompt(prompt):
                             "properties": {
                                 "action": {
                                     "type": "string",
-                                    "description": "give me the action that the user wants to perform, inclidign what the action targets, the result should be given from the prompt, if it is not relevant return null"
+                                    "description": "give me the action that the user wants to perform, inclidign what the action targets, the result should be given from the prompt, if it is not relevant return null",
+                                    "enum": ["create", "read", "update", "delete"]
                                 },
                                 "from_date": {
                                     "type": "string",
@@ -82,7 +83,8 @@ def get_interpretation_from_prompt(prompt):
                                 },
                                 "priority": {
                                     "type": "string",
-                                    "description": "the priority of the action"
+                                    "description": "the priority of the action if it is specified, if not specified return null",
+                                    "enum": ["low", "medium", "high"]
                                 },
                             },
                             "required": ["action"],
