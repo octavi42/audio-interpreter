@@ -10,12 +10,7 @@ class Deepgram(ModelBase):
     
 
     def process_audio(self, audio, model="nova-2", language="en", smart_format=True):
-        # Simulating the use of the API key and audio URL
-        print(f"API Key: {self.api_key}")
-        print(f"Audio URL: {audio}")
-
         source = self.get_source(audio)
-        print(source)
 
         # Create an instance of the Deepgram API client
         dg_client = DeepgramAPI(self.api_key)
@@ -29,8 +24,10 @@ class Deepgram(ModelBase):
                 "smart_format": smart_format,
             },
         )
+        
+        result = response["results"]["channels"][0]["alternatives"][0]["transcript"]
 
-        return response["results"]["channels"][0]["alternatives"][0]["transcript"],
+        return result
 
 
     def get_source(self, audio):
@@ -55,30 +52,3 @@ class Deepgram(ModelBase):
                 }
 
         return source
-    
-
-
-    def internal_process(self, audio, env, model="nova-2", language="en", smart_format=True):
-        print()
-        print("Deepgram env")
-        print(audio)
-
-        
-
-        dg_client = Deepgram(env)
-        response = dg_client.transcription.sync_prerecorded(
-            source,
-            {
-                "model": model,
-                "language": language,
-                "smart_format": smart_format,
-            },
-        )
-
-        text = response["results"]["channels"][0]["alternatives"][0]["transcript"]
-
-        result = {
-            "original_text": text,
-        }
-
-        return text

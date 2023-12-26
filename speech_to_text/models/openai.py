@@ -1,4 +1,6 @@
-# speech_to_text/models/deepgram.py
+from openai import OpenAI
+client = OpenAI()
+from pathlib import Path
 
 from speech_to_text.models import ModelBase
 
@@ -8,12 +10,11 @@ class Openai(ModelBase):
         self.api_key = api_key
 
     def process_audio(self, audio_url):
-        # Simulating the use of the API key and audio URL
-        print(f"API Key: {self.api_key}")
-        print(f"Audio URL: {audio_url}")
+        
+        transcript = client.audio.translations.create(
+            model="whisper-1", 
+            file=Path(audio_url),
+            response_format="text"
+        )
 
-        # Add your actual processing logic here
-        # For now, just returning a placeholder result
-        # result = self._simulate_audio_processing(audio_url)
-
-        return self.api_key
+        return transcript

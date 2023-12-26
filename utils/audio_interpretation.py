@@ -4,21 +4,26 @@ import json
 import os
 import requests
 
-
 load_dotenv()
 
+# Retry decorator with exponential backoff to handle transient failures
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
 def chat_completion_request(messages, tools=None, tool_choice=None, model="gpt-4-1106-preview"):
+    # Define headers for the API request including authorization with OpenAI API key
     headers = {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + os.environ['OPENAI_API_KEY'],
     }
+
+    # Construct JSON data for the API request
     json_data = {"model": model, "messages": messages}
     if tools is not None:
         json_data.update({"tools": tools})
     if tool_choice is not None:
         json_data.update({"tool_choice": tool_choice})
+
     try:
+        # Send a POST request to OpenAI API for chat completions
         response = requests.post(
             "https://api.openai.com/v1/chat/completions",
             headers=headers,
@@ -26,17 +31,20 @@ def chat_completion_request(messages, tools=None, tool_choice=None, model="gpt-4
         )
         return response
     except Exception as e:
+        # Handle exceptions related to API requests
         print("Unable to generate ChatCompletion response")
         print(f"Exception: {e}")
         return e
     
 
 def get_interpretation_from_prompt(prompt):
+    # Define a set of messages for the chat, including system and user roles
     messages = [
         {"role": "system", "content": "you are an advanced prompt interpreter that decodes what someone wants to say"},
         {"role": "user", "content": f'taken this command "{prompt}" take out the action, from date to date, and priority'},
     ]
 
+    # Define a set of tools for interpretation using the Chat API
     tools = [
         {
             "type": "function",
@@ -46,6 +54,7 @@ def get_interpretation_from_prompt(prompt):
                 "parameters": {
                     "type": "object",
                     "properties": {
+                        # Define parameters for relevance and result
                         "relevance": {
                             "type": "object",
                             "description": "how relevant is the prompt to this function",
@@ -65,6 +74,7 @@ def get_interpretation_from_prompt(prompt):
                             },
                             "required": ["is_relevant"],
                         },
+                        # Define result properties including action, action_target, dates, and priority
                         "result": {
                             "type": "object",
                             "properties": {
@@ -94,16 +104,18 @@ def get_interpretation_from_prompt(prompt):
                             "required": ["action"],
                         }
                     },
-                "required": ["relevance", "result"],
+                    "required": ["relevance", "result"],
                 },
             },
         }
     ]
 
+    # Make a chat completion request using the defined messages and tools
     chat_response = chat_completion_request(
         messages, tools=tools, tool_choice={"type": "function", "function": {"name": "interprete_prompt"}},
     )
 
+    # Parse the output from the Chat API response
     output = chat_response.json()["choices"][0]["message"]["tool_calls"][0]["function"]["arguments"]
 
     return json.loads(output)
