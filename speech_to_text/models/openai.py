@@ -2,9 +2,7 @@ from openai import OpenAI
 client = OpenAI()
 from pathlib import Path
 
-from speech_to_text.models import ModelBase
-
-class Openai(ModelBase):
+class Openai():
     def __init__(self, api_key):
         super().__init__()
         self.api_key = api_key

@@ -1,9 +1,7 @@
-import os
 import mimetypes
-from speech_to_text.models import ModelBase
 from deepgram import Deepgram as DeepgramAPI
 
-class Deepgram(ModelBase):
+class Deepgram():
     def __init__(self, api_key):
         super().__init__()
         self.api_key = api_key

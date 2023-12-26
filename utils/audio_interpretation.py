@@ -8,7 +8,7 @@ load_dotenv()
 
 # Retry decorator with exponential backoff to handle transient failures
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
-def chat_completion_request(messages, tools=None, tool_choice=None, model="gpt-4-1106-preview"):
+def chat_completion_request(messages, tools=None, tool_choice=None, model=os.environ['GPT_MODEL']):
     # Define headers for the API request including authorization with OpenAI API key
     headers = {
         "Content-Type": "application/json",
