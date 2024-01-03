@@ -7,12 +7,13 @@ class Openai():
         super().__init__()
         self.api_key = api_key
 
-    def process_audio(self, audio_url):
+    def process_audio(self, audio_url, language="en"):
         
         transcript = client.audio.translations.create(
             model="whisper-1", 
             file=Path(audio_url),
-            response_format="text"
+            response_format="text",
+            language=language
         )
 
         return transcript

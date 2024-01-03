@@ -46,8 +46,26 @@ def process_audio(audio, env_model_name=os.getenv("MODEL_NAME")):
     if env_model_name is "":
         env_model_name = "deepgram"
 
+    print(env_model_name)
+
     model = import_model(env_model_name)
 
     result = model.process_audio(audio)
+
+    return result
+
+
+def process_audio_with_language(audio, language, env_model_name=os.getenv("MODEL_NAME")):
+    if env_model_name is "":
+        env_model_name = "deepgram"
+
+    if language=="english":
+        language="en"
+        model = import_model(env_model_name)
+    elif language=="arabic":
+        language="ar-ms"
+        model = import_model("ns")
+
+    result = model.process_audio(audio=audio, language=language)
 
     return result

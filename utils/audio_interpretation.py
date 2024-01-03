@@ -3,6 +3,7 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 import json
 import os
 import requests
+from datetime import datetime
 
 load_dotenv()
 
@@ -38,10 +39,13 @@ def chat_completion_request(messages, tools=None, tool_choice=None, model=os.env
     
 
 def get_interpretation_from_prompt(prompt):
+
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M")
+
     # Define a set of messages for the chat, including system and user roles
     messages = [
         {"role": "system", "content": "you are an advanced prompt interpreter that decodes what someone wants to say"},
-        {"role": "user", "content": f'taken this command "{prompt}" take out the action, from date to date, and priority'},
+        {"role": "user", "content": f'taken this prompt "{prompt}" take out the title, description, action, from date to date, and priority, keep in mind this is the current date {current_date}'},
     ]
 
     # Define a set of tools for interpretation using the Chat API
@@ -50,7 +54,7 @@ def get_interpretation_from_prompt(prompt):
             "type": "function",
             "function": {
                 "name": "interprete_prompt",
-                "description": "interpret the prompt, the prompt should be an action for a database",
+                "description": f"interpret the prompt, the prompt is about a task",
                 "parameters": {
                     "type": "object",
                     "properties": {
@@ -78,6 +82,14 @@ def get_interpretation_from_prompt(prompt):
                         "result": {
                             "type": "object",
                             "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": f"add a simple title to the task, it should be the action of the prompt",
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": f"give me the description of the task, summarize from the prompt, include only the essential information",
+                                },
                                 "action": {
                                     "type": "string",
                                     "description": "give me the action that the user wants to perform, inclidign what the action targets, the result should be given from the prompt, if it is not relevant return null",
@@ -101,7 +113,7 @@ def get_interpretation_from_prompt(prompt):
                                     "enum": ["low", "medium", "high"]
                                 },
                             },
-                            "required": ["action"],
+                            "required": ["action", "title", "description"],
                         }
                     },
                     "required": ["relevance", "result"],

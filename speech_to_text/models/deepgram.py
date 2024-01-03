@@ -20,6 +20,7 @@ class Deepgram():
                 "model": model,
                 "language": language,
                 "smart_format": smart_format,
+                'detect_language': True
             },
         )
         

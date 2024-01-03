@@ -4,7 +4,7 @@ class Example():
         self.api_key = api_key
 
     # This is the process_audio function, all models need to have this function
-    def process_audio(self, audio_url):
+    def process_audio(self, audio_url, language="en"):
         # you can call additional functions
         example = self.example_function()
 
