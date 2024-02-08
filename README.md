@@ -50,29 +50,34 @@ The program is a Flask server designed to interpret audio files for key data ext
 - Each model file must have a `process_audio` function for text extraction from audio. 
 - See `example.py` in `speech_to_text/models` for custom model implementation examples.
 
-## New Routes and Functionalities:
+## Security
 
-### `/interpret`:
-- Transcribes and interprets an audio file.
-- POST a WAV audio file with the key "audio".
-- Returns a comprehensive JSON object with transcription, relevance, and detailed interpretation of the audio content.
+### JWT Authentication
 
-### `/interpret_with_language`:
-- Similar to `/interpret`, but for specific language support (e.g., Arabic).
-- Translates the interpreted content if necessary.
-- POST a WAV audio file with the key "audio" and specify the "language".
+To ensure the security of the API, all routes, with the exception of `/ping`, are protected using JWT (JSON Web Tokens) authentication. This requires clients to include a valid JWT in the request header to access the protected endpoints.
 
-### `/speech_to_text`:
-- Transcribes audio to text without further interpretation.
-- POST a WAV audio file with the key "audio".
-- Returns the transcription result as text.
+#### Obtaining a JWT
 
-### `/speech_to_text_with_language`:
-- Transcribes audio to text in a specified language.
-- POST a WAV audio file with the key "audio" and specify the "language".
-- Ideal for multilingual audio content.
+Currently, the documentation does not specify a method for obtaining a JWT within this system. Typically, a separate authentication endpoint is used to exchange user credentials for a JWT. Ensure you have a valid JWT, obtained through the prescribed method for your application, before attempting to access protected routes.
 
-## Usage Instructions:
+#### Sending Requests with JWT
+
+When making requests to protected endpoints, include the JWT in the request's `Authorization` header, prefixed with `Bearer`. Here's the format you should use in your HTTP request headers:
+
+```
+Authorization: Bearer <your_jwt_token_here>
+```
+
+#### Token Secret Key
+
+It's crucial for the JWT's secret key to match the secret key configured on the server. This secret ensures the integrity and authenticity of the tokens. Keep this key secure and do not expose it in public repositories or client-side code.
+
+### Public Endpoints
+
+The `/ping` route is an example of a public endpoint that does not require JWT authentication. This can be used to verify the server status without needing authentication.
+
+## Usage Instructions
+
 - Ensure the Flask server is running.
-- Use appropriate API routes for audio interpretation, transcription, and model management.
+- Use the appropriate API routes for audio interpretation, transcription, and model management. For all routes except for public endpoints like `/ping`, include a JWT in the `Authorization` header as described in the Security section.
 - For adding custom models, follow the guidelines under the Scalability section.

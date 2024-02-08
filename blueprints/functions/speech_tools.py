@@ -3,11 +3,13 @@ import os
 from utils.audio_interpretation import get_interpretation_from_prompt
 from speech_to_text.choose_model import process_audio, process_audio_with_language
 from utils.translator import translate
+from utils.authentication import token_required
 import uuid
 
 speech_tools_pb = Blueprint('speech_tools', __name__)
 
 @speech_tools_pb.route("/interpret", methods=["POST"])
+@token_required
 def audio_interpret():
     if request.method == "POST":
         # Getting the audio file
@@ -38,6 +40,7 @@ def audio_interpret():
         
 
 @speech_tools_pb.route("/interpret_with_language", methods=["POST"])
+@token_required
 def audio_interpret_with_language():
     if request.method == "POST":
         # Getting the audio file
@@ -78,6 +81,7 @@ def audio_interpret_with_language():
 
 
 @speech_tools_pb.route("/speech_to_text", methods=["POST"])
+@token_required
 def speech_to_text():
     if request.method == "POST":
         # Getting the audio file
@@ -102,6 +106,7 @@ def speech_to_text():
         
 
 @speech_tools_pb.route("/speech_to_text_with_language", methods=["POST"])
+@token_required
 def speech_to_text_with_language():
     if request.method == "POST":
         # Getting the audio file

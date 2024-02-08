@@ -3,6 +3,7 @@ import json
 from dotenv import load_dotenv
 from blueprints.settings.settings import settings_pb
 from blueprints.functions.speech_tools import speech_tools_pb
+import jwt
 
 
 app = Flask(__name__)
@@ -15,7 +16,6 @@ load_dotenv()
 @app.route("/ping")
 def ping():
     return json.dumps({"message": "pong"})
-
 
 if __name__ == "__main__":
     print("Running app.py directly")
